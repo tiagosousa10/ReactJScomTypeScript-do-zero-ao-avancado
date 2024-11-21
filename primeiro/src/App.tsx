@@ -1,4 +1,4 @@
-import {useState,useEffect, useRef, useMemo} from 'react'
+import {useState,useEffect, useRef, useMemo,useCallback} from 'react'
 
 
 
@@ -34,7 +34,7 @@ useEffect(() => {
 
 
 //                              ----funcoes----
-  function handleRegister(){
+  const handleRegister = useCallback(() => {
     if(!input){
       alert('preencha o nome da sua tarefa')
       return;
@@ -47,7 +47,7 @@ useEffect(() => {
 
     setTasks(oldTasks => [...oldTasks,input])
     setInput('')
-  }
+  },[input,tasks])
 
 
   function handleSaveEdit(){ //editar conforme o index 
