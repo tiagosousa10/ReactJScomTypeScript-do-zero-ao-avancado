@@ -1,65 +1,45 @@
 import React,{useState} from "react"
 
-interface InfoAlunoProps{
+interface UserProps{
   nome:string,
-  idade:string
+  cargo:string
 }
 
-
 export default function App(){
-  const [input,setInput] = useState('')
-  const [idade,setIdade] = useState('')
+  const [user,setUser] = useState<UserProps>({
+    nome:'visitante',
+    cargo:''
+  })
 
-  const [infoAluno,setInfoAluno] = useState<InfoAlunoProps>()
-
-  const [contador,setContador] = useState(0)
-
-  function mostrarAluno(){
-    setInfoAluno({
-      nome: input,
-      idade: idade,
-    })  
+  function handleLogin(){
+    setUser({
+      nome:'Sujeito Programador',
+      cargo:'Programador'
+    })
   }
-
-  function adicionar(){
-    setContador((valorAtual) => valorAtual + 1)
-
+  function  handleLogout(){
+    setUser({
+      nome:'visitante',
+      cargo:''
+    })
   }
-
-  function diminuir(){
-    if(contador === 0) return;
-    setContador((valorAtual) => valorAtual - 1)  }
 
   return(
     <div>
 
     <h1>Conhecendo useState</h1>
 
-    <input 
-      type="text"
-      placeholder="Digite o nome" 
-      value={input}
-      onChange={(e) => setInput(e.target.value)} />
-    <br/>  <br/>
-     <input 
-      placeholder="Digite a idade" 
-      value={idade} 
-      onChange={(e) => setIdade(e.target.value)} />
+    <button onClick={handleLogin}>
+      Entrar
+    </button>
+    <button onClick={handleLogout}>
+      Sair
+    </button>
+    <h4>Olá {user.nome} </h4>
+    <strong> {user.cargo} </strong>
 
-    <br/>
 
-    <button onClick={mostrarAluno}>Mostrar Aluno</button>
-
-    <hr/>
-
-    <h3>Bem vindo: {infoAluno?.nome}</h3>
-    <h4>Idade  {infoAluno?.idade} </h4>
-
-    <hr/> 
-    <br/>
-
-    <h1>Contador com useState: </h1>
-    <button onClick={adicionar}>+</button> {contador} <button onClick={diminuir}>-</button>
+   
     </div>
   )
 }
