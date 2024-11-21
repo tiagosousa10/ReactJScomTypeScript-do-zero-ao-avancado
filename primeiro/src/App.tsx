@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 
 
 
@@ -11,6 +11,15 @@ export default function App(){
     enabled:false,
     task:''
   })
+
+
+useEffect(() => {
+    const tarefasSalvas = localStorage.getItem('@cursoreact')
+
+    if(tarefasSalvas){
+      setTasks(JSON.parse(tarefasSalvas))
+    }
+  },[])
 
 
 //                              ----funcoes----
@@ -27,7 +36,9 @@ export default function App(){
 
     setTasks(oldTasks => [...oldTasks,input])
     setInput('')
+    localStorage.setItem('@cursoreact', JSON.stringify([...tasks,input]))
   }
+
 
   function handleSaveEdit(){ //editar conforme o index 
     const findIndexTask = tasks.findIndex(task => task === editTask.task)
@@ -42,12 +53,15 @@ export default function App(){
     })
 
     setInput('')
+    localStorage.setItem('@cursoreact', JSON.stringify([allTasks]))
   }
+
 
   function handleDelete(item:string){
     const removeTask = tasks.filter(task => task !== item)
     console.log(removeTask)
     setTasks(removeTask)
+    localStorage.setItem('@cursoreact', JSON.stringify(removeTask))
   }
 
   function handleEdit(item:string){
