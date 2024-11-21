@@ -1,16 +1,37 @@
-import {Header} from './components/header'
-import {Aluno} from './components/aluno'
-import {Footer} from './components/footer'
+import React,{useState} from "react"
 
 export default function App(){
+  const [input,setInput] = useState('')
+  const [aluno,setAluno] = useState('sem nada')
+  const [idade,setIdade] = useState('')
+
+  function mostrarAluno(){
+    setAluno(input)
+    console.log(idade)
+  }
+
+
+
   return(
     <div>
-      <Header title="Curso React + Typescript"/>
-      <h1>Meu projeto</h1>
-      <Aluno nome="Andre" idade={15} />
-      <Aluno nome="Teste" idade={30}/>
-      <Footer/>
 
+    <h1>Conhecendo useState</h1>
+
+    <input 
+    type="text"
+     placeholder="Digite o nome" 
+     value={input}
+     onChange={(e) => setInput(e.target.value)} />
+  <br/>  <br/>
+     <input placeholder="Digite a idade" value={idade} onChange={(e) => setIdade(e.target.value)} />
+
+    <br/>
+
+    <button onClick={mostrarAluno}>Mostrar Aluno</button>
+
+    <hr/>
+
+    <h3>Bem vindo {aluno}</h3>
     </div>
   )
 }
