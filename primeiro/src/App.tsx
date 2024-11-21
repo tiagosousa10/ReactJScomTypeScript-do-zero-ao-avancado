@@ -1,47 +1,35 @@
-import React,{useState} from "react"
-
-interface UserProps{
-  nome:string,
-  cargo:string
-}
+import {useState} from 'react'
 
 export default function App(){
-  const [user,setUser] = useState<UserProps>({
-    nome:'visitante',
-    cargo:''
-  })
+  const[input,setInput] = useState('')
+  const [tasks,setTasks] = useState([
+    'Estudar React',
+    'Jogar a Bola',
+    'Fazer o comer'
+  ])
 
-  function handleLogin(){
-    setUser({
-      nome:'Sujeito Programador',
-      cargo:'Programador'
-    })
-  }
-  function  handleLogout(){
-    setUser({
-      nome:'visitante',
-      cargo:''
-    })
-  }
+  function handleRegister(){
+    if(!input){
+      alert('preencha o nome da sua tarefa')
+      return;
+    }
 
+    setTasks(oldTasks => [...oldTasks,input])
+    setInput('')
+  }
   return(
     <div>
-
-    <h1>Conhecendo useState</h1>
-
-    <button onClick={handleLogin}>
-      Entrar
-    </button>
-    <button onClick={handleLogout}>
-      Sair
-    </button>
-    <h4>Olá {user.nome} </h4>
-    <strong> {user.cargo} </strong>
-
-
-   
+      <h1>Lista de Tarefas</h1>
+      <input value={input} onChange={(e) => setInput(e.target.value)} placeholder='Digite o nome da tarefa' />
+      <button onClick={handleRegister}>Adicionar Tarefa</button>
+      <hr/>
+      {tasks.map((task,index) => (
+        <section key={task}>
+          <span>{task}</span>
+          <button>EXCLUIR</button>
+        </section>
+      ))}
     </div>
   )
 }
-
 
