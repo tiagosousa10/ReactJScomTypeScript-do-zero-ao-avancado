@@ -1,10 +1,11 @@
-import {useState,useEffect} from 'react'
+import {useState,useEffect, useRef} from 'react'
 
 
 
 export default function App(){
+  const inputRef = useRef<HTMLInputElement>(null)
+  const firstRender = useRef(true)
   //                              ----useStates----
-
   const [input,setInput] = useState('')
   const [tasks,setTasks] = useState<string[]>([])
   const [editTask,setEditTask] = useState({
@@ -21,6 +22,16 @@ useEffect(() => {
     }
   },[])
 
+  useEffect(() => {
+    if(firstRender.current){
+      firstRender.current = false;
+      return
+    }
+    localStorage.setItem('@cursoreact', JSON.stringify(tasks))
+    console.log('useEffect foi chamado')
+
+  }, [tasks])
+
 
 //                              ----funcoes----
   function handleRegister(){
@@ -36,7 +47,6 @@ useEffect(() => {
 
     setTasks(oldTasks => [...oldTasks,input])
     setInput('')
-    localStorage.setItem('@cursoreact', JSON.stringify([...tasks,input]))
   }
 
 
@@ -53,7 +63,6 @@ useEffect(() => {
     })
 
     setInput('')
-    localStorage.setItem('@cursoreact', JSON.stringify([allTasks]))
   }
 
 
@@ -61,10 +70,11 @@ useEffect(() => {
     const removeTask = tasks.filter(task => task !== item)
     console.log(removeTask)
     setTasks(removeTask)
-    localStorage.setItem('@cursoreact', JSON.stringify(removeTask))
   }
+  
 
   function handleEdit(item:string){
+    inputRef.current?.focus()
     setInput(item)
     setEditTask({
       enabled:true,
@@ -73,12 +83,18 @@ useEffect(() => {
   }
 
 
+
 //                              ----return----
 
   return(
     <div>
       <h1>Lista de Tarefas</h1>
-      <input value={input} onChange={(e) => setInput(e.target.value)} placeholder='Digite o nome da tarefa' />
+      <input 
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder='Digite o nome da tarefa'
+        ref={inputRef} 
+        />
       <button onClick={handleRegister}>
         {editTask.enabled ? 'Atualizar Tarefa' : 'Adicionar Tarefa'}
       </button>
