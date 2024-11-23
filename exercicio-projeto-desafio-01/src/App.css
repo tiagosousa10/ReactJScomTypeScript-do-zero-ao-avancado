@@ -1,0 +1,49 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  background-color: #121212;
+  padding-top: 100px;
+  gap: 20px;
+}
+
+.title{
+  color: #fff;
+  margin: 20px 0;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width:700px;
+  height: 300px;
+  padding: 30px;
+  gap: 12px;
+  border-radius: 4px;
+}
+
+.labelForm{
+font-size: 18px;
+font-weight: bold;
+}
+
+.inputForm{
+  padding: 12px 0 ;
+  border-radius: 4px;
+}
+
+.buttonForm{
+  padding: 12px 0;
+  width: 300px;
+  margin: 10px auto;
+  background-color: antiquewhite;
+  font-size: 18px;
+  font-weight: bold;
+}
+.pIdade{
+  color: #fff;
+  font-size: 18px;
+}
