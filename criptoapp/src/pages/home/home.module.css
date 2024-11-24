@@ -94,11 +94,13 @@
     transform: scale(1.5);
     z-index: 99;
   }
+
   .name{
     display: flex;
     gap: 8px;
     align-items: center;
   }
+  
   /* RESPONSIVIDADE TABELA */
   @media screen and (max-width: 600px){
     .name img{

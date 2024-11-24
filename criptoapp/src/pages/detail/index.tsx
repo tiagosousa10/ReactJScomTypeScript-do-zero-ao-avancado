@@ -3,6 +3,8 @@ import {useParams, useNavigate} from 'react-router-dom'
 
 import {CoinProps} from '../home/index'
 
+import styles from './detail.module.css'
+
 interface ResponseData {
   data:CoinProps;
 }
@@ -18,6 +20,7 @@ function Detail() {
   const navigate = useNavigate()
 
   const [coin,setCoin] = useState<CoinProps>()
+  const [loading,setLoading] = useState(true)
 
   useEffect(() => {
     async function getCoin(){
@@ -59,13 +62,50 @@ function Detail() {
     }
 
     getCoin()
+    setLoading(false)
   },[cripto])
 
 
+  if(loading || !coin){
+    return(
+      <div className={styles.container}>
+        <h4 className={styles.center}>Carregando Detalhes</h4>
+      </div>
+    )
+  }
 
     return (
-      <div>
-        <h1>Pagina Detail {cripto}</h1>
+      <div className={styles.container}> 
+        <h1 className={styles.center}>{coin?.name}  </h1>
+        <h1 className={styles.center}>{coin?.symbol}  </h1>
+
+        <section className={styles.content}>
+          <img 
+            src={`https://assets.coincap.io/assets/icons/${coin?.symbol
+              .toLocaleLowerCase()}@2x.png`}
+            alt='logoDaMoeda'
+            className={styles.logo} />
+            <h1>{coin?.name} | {coin?.symbol}  </h1>
+
+            <p><strong>Preço: </strong>{coin?.formatedPrice} </p>
+
+            <a href="">
+              <strong>Mercado: </strong>{coin?.formatedMarket}
+            </a>
+
+            <a href="">
+              <strong>Volume: </strong>{coin?.formatedVolume}
+            </a>
+
+            <a href="">
+              <strong>Mudança 24h: </strong>
+              <span className={Number(coin?.changePercent24Hr) > 0 ? styles.profit : styles.loss }>
+                {Number(coin?.changePercent24Hr).toFixed(2)}
+              </span>
+            </a>
+
+        </section>
+
       </div>
     )
   }
