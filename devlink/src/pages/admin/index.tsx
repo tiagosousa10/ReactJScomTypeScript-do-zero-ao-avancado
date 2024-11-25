@@ -1,4 +1,4 @@
-import {FormEvent, useState} from 'react'
+import {FormEvent, useState, useEffect} from 'react'
 import {FiTrash} from 'react-icons/fi'
 
 import { Header } from "../../components/Header";
@@ -15,6 +15,13 @@ import {
     deleteDoc,
 } from 'firebase/firestore'
 
+interface LinkProps{
+    id:string,
+    name:string,
+    url:string,
+    bg:string,
+    color:string
+}
 
 
 export function Admin(){
@@ -23,6 +30,34 @@ export function Admin(){
     const [textColorInput,setTextColorInput] = useState("#f1f1f1")
     const [backgroundColorInput,setBackgroundColorInput] = useState("#121212")
 
+    const [links,setLinks] = useState<LinkProps[]>([])
+
+    useEffect(() => {
+        const linksRef = collection(db, "links");
+        const queryRef = query(linksRef,orderBy("created", "asc"))
+
+        const unsub = onSnapshot(queryRef, (snapshot) => {
+            const lista = [] as LinkProps[]
+
+            snapshot.forEach((doc) => {
+                lista.push({
+                    id: doc.id,
+                    name: doc.data().name,
+                    url:doc.data().url,
+                    bg: doc.data().bg,
+                    color:doc.data().color
+
+                })
+            })
+
+            setLinks(lista)
+
+        })
+        //limpar - desmontar - unMount -> caso va para outra pagina e nao precise do recurso
+        return () => {
+            unsub()
+        }
+    }, [])
 
 
     function handleRegister(e:FormEvent){
