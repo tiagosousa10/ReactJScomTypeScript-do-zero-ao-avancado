@@ -60,7 +60,7 @@ export function Admin(){
     }, [])
 
 
-    function handleRegister(e:FormEvent){
+  function handleRegister(e:FormEvent){
         e.preventDefault()
         
         if(nameInput === '' || urlInput === ''){
@@ -86,6 +86,10 @@ export function Admin(){
 
     }
 
+  async function handleDeleteLink(id:string){
+        const docRef = doc(db,"links", id)
+        await deleteDoc(docRef)
+    }
 
 
     return(
@@ -155,19 +159,23 @@ export function Admin(){
                                                 {/* MEUS LINKS  */}
             <h2 className='font-bold text-white mb-4 text-2xl'>Meus Links</h2>
 
-            <article
-             className='flex items-center justify-between w-11/12 max-w-xl rounded py-3 px-2 mb-2 select-none'
-             style={{backgroundColor:"#2563eb", color:"#FFF"}}
-             >
-                <p>Canal do Youtube</p>
-                <div>
-                    <button
-                    className='border border-dashed p-1 rounded bg-neutral-900'
-                    >
-                        <FiTrash size={18} color='#fff'/>
-                    </button>
-                </div>
-            </article>
+            {links.map((link) => (
+                <article
+                key={link.id}
+                className='flex items-center justify-between w-11/12 max-w-xl rounded py-3 px-2 mb-2 select-none'
+                style={{backgroundColor: link.bg, color: link.color}}
+                >
+                   <p>{link.name}</p>
+                   <div>
+                       <button
+                       className='border border-dashed p-1 rounded bg-neutral-900'
+                       onClick={() => handleDeleteLink(link.id)}
+                       >
+                           <FiTrash size={18} color='#fff'/>
+                       </button>
+                   </div>
+               </article>
+            ))}
 
 
         </div>
