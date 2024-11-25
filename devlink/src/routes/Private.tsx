@@ -41,7 +41,7 @@ export function Private({children} : PrivateProps) : any{
     return <div></div>
    }
 
-   if(!signed){
+   if(!signed){ //se nao estiver logado redirecionar sempre para a page LOGIN!
     return <Navigate to={"/login"}   />
    }
 
