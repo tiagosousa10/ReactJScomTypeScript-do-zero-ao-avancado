@@ -7,7 +7,7 @@ import {Input} from '../../components/Input'
 import {db} from '../../services/firebaseConnection'
 import {
     addDoc,
-    collection,
+    collection, 
     onSnapshot,
     query,
     orderBy,
