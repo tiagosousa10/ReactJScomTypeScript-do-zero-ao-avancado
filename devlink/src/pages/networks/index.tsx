@@ -1,4 +1,4 @@
-import {FormEvent, useState} from 'react'
+import {FormEvent, useState,useEffect} from 'react'
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Input";
 
@@ -16,6 +16,21 @@ export function Networks(){
     const [instagram,setInstagram] = useState('')
     const [youtube,setYoutube] = useState('')
     
+
+    useEffect(() => {
+        function loadLinks(){
+            const docRef = doc(db,"social","link")
+            getDoc(docRef).then((snapshot) => {
+                if(snapshot.data() !== undefined){
+                    setFacebook(snapshot.data()?.facebook)
+                    setInstagram(snapshot.data()?.instagram)
+                    setYoutube(snapshot.data()?.youtube)
+                }
+            })
+        }
+
+        loadLinks()
+    },[])
 
     function handleRegister(e:FormEvent){
         e.preventDefault()
@@ -52,7 +67,7 @@ export function Networks(){
                 <label className="text-white font-medium mt-2 mb-2">Link do Instagram</label>
                 <Input  
                     type="url" 
-                    placeholder="Digite o url do facebook..."
+                    placeholder="Digite o url do instagram..."
                     value={instagram}
                     onChange={(e) => setInstagram(e.target.value)}
                 />
@@ -60,7 +75,7 @@ export function Networks(){
                 <label className="text-white font-medium mt-2 mb-2">Link do Yotube</label>
                 <Input  
                     type="url" 
-                    placeholder="Digite o url do facebook..."
+                    placeholder="Digite o url do youtube..."
                     value={youtube}
                     onChange={(e) => setYoutube(e.target.value)}
                 />
