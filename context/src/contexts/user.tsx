@@ -3,7 +3,8 @@ import { createContext, ReactNode, useState} from 'react'
 type UserContextData = {
     aluno:string;
     qtdAlunos:number;
-    mudaNome: (nome) => void;
+    mudaNome: (nome:string) => void;
+    novoAluno: () => void;
 } 
 
 interface UserProviderProps{
@@ -21,8 +22,12 @@ function UserProvider({children} : UserProviderProps){
         setAluno(nome)
     }
 
+    function novoAluno(){
+        setQtdAlunos(alunosAntigos => alunosAntigos +1)
+    }
+
     return(
-        <UserContext.Provider value={{aluno, qtdAlunos,mudaNome}}>
+        <UserContext.Provider value={{aluno, qtdAlunos,mudaNome, novoAluno}}>
             {children}
         </UserContext.Provider>
     )

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {Alunos} from './components/Alunos'
-
+import {Footer}from './components/Footer'
 import UserProvider from './contexts/user'
 
 
@@ -18,6 +18,8 @@ function App() {
       <Alunos />
     </div>
     
+
+    <Footer/>
     </UserProvider>
   )
 }
