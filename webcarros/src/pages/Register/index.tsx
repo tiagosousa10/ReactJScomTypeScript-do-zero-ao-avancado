@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link , useNavigate} from 'react-router-dom'
 import logoImg from '../../assets/logo.svg'
 
 //COMPONENTS
@@ -8,6 +8,10 @@ import {useForm} from 'react-hook-form'
 import {z} from 'zod'
 import {zodResolver} from '@hookform/resolvers/zod'
 
+import { auth } from '../../services/firebaseConnection'
+import {createUserWithEmailAndPassword, updateProfile, signOut} from 'firebase/auth'
+import { useEffect } from 'react'
+
 const schema = z.object({
     name:z.string().nonempty('O campo nome é obrigatório'),
     email:z.string().email("Insira um email válido").nonempty("O campo email é obrigatório"),
@@ -16,14 +20,39 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
+
+
+
 export function Register(){
+    const navigate = useNavigate()
+
+    useEffect(() => { 
+        async function handleLogout(){ // caso user logado tente acessar a page login => desloga automatico
+            await signOut(auth)
+        }
+
+        handleLogout()
+
+    },[])
+
     const {register,handleSubmit,formState:{errors}} = useForm<FormData>({
         resolver: zodResolver(schema),
         mode:"onChange"
     })
 
-    function onSubmit(data: FormData){
-        console.log(data)
+   async function onSubmit(data: FormData){
+        createUserWithEmailAndPassword(auth,data.email,data.password)
+        .then(async (user) => {
+            await updateProfile(user.user, {
+                displayName:data.name
+            })
+
+            console.log('cadastrado com sucesso!')
+            navigate('/')
+        })
+        .catch((e) => {
+            console.log('error: ' + e)
+        })
     }
 
     return(
@@ -71,9 +100,11 @@ export function Register(){
           
 
                 <button   type='submit'  className='bg-zinc-900 w-full rounded-md text-white font-medium h-10'>
-                    Acessar
+                    Cadastrar
                 </button>
             </form>
+
+            
             <Link to={'/login'}>Já possui uma conta? Faça o login!</Link>
 
             
