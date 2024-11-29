@@ -1,4 +1,6 @@
+import { useEffect, useContext } from 'react'
 import { Link , useNavigate} from 'react-router-dom'
+import {AuthContext} from '../../contexts/AuthContext'
 import logoImg from '../../assets/logo.svg'
 
 //COMPONENTS
@@ -10,7 +12,7 @@ import {zodResolver} from '@hookform/resolvers/zod'
 
 import { auth } from '../../services/firebaseConnection'
 import {createUserWithEmailAndPassword, updateProfile, signOut} from 'firebase/auth'
-import { useEffect } from 'react'
+
 
 const schema = z.object({
     name:z.string().nonempty('O campo nome é obrigatório'),
@@ -25,6 +27,7 @@ type FormData = z.infer<typeof schema>
 
 export function Register(){
     const navigate = useNavigate()
+    const {handleInfoUser} = useContext(AuthContext)
 
     useEffect(() => { 
         async function handleLogout(){ // caso user logado tente acessar a page login => desloga automatico
@@ -46,6 +49,11 @@ export function Register(){
             await updateProfile(user.user, {
                 displayName:data.name
             })
+
+            handleInfoUser({
+                name:data.email, 
+                email:data.email,
+                 uid:user.user.uid})
 
             console.log('cadastrado com sucesso!')
             navigate('/')
