@@ -6,7 +6,7 @@ interface AuthProviderProps {
     children: ReactNode;
 }
 
-
+//o que quero EXPORTAR para OUTRAS PAGINAS!
 type AuthContextData = {
  signed:boolean;
  loadingAuth:boolean;
