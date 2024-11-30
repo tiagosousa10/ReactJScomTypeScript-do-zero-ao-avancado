@@ -4,7 +4,7 @@ import { PanelHeader } from "../../components/PanelHeader"
 
 import { FiTrash2} from'react-icons/fi'
 
-import {collection,getDocs,where, query} from 'firebase/firestore'
+import {collection,getDocs,where, query, doc,deleteDoc} from 'firebase/firestore'
 import {db} from '../../services/firebaseConnection'
 
 import {AuthContext} from '../../contexts/AuthContext'
@@ -62,40 +62,46 @@ export function Dashboard(){
         loadCars()
     }, [user])
 
-
+   async function handleDeleteCar(id:string){
+        const docRef = doc(db,'cars', id)
+        await deleteDoc(docRef)
+        setCars(cars.filter(oldCar => oldCar.id !== id)) // retorna todos os carros diferentes do id recebido
+    }
 
     return(
         <Container>
             <PanelHeader/>
             <main className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 
-                <section className="w-full bg-white rounded-lg relative">
+            {cars.map((car)=> (
+                    <section key={car.id} className="w-full bg-white rounded-lg relative">
                     <button 
-                    onClick={() => {}}
+                    onClick={() => {handleDeleteCar(car.id)}}
                     className="absolute px-3 bg-white w-14 h-14 rounded-full items-center justify-center right-2 top-2 drop-shadow">
                         <FiTrash2 size={26} color="#000"/>
                     </button>
 
                     <img  
-                    className="w-full rounded-lg mb-2 max-h-70 " 
-                    src="https://firebasestorage.googleapis.com/v0/b/webcarros-784f0.firebasestorage.app/o/images%2FMDZTGkLor5ZO2YWPny6bRmUu12p2%2F10a37b43-ffa1-4834-bce9-429b96fad117?alt=media&token=fe7ba021-a75c-4ea4-ab09-b74fec4bb3f8" />
-                    <p className="font-bold mt-1 px-2 mb-2">Nissa vera</p>
+                        className="w-full rounded-lg mb-2 max-h-70 " 
+                        src={car.images[0].url}     />
+                    <p className="font-bold mt-1 px-2 mb-2">{car.name}</p>
 
                     <div className="flex flex-col px-2">
                        <span className="text-zinc-700">
-                        Ano 2016/2016 | 230.000 km
+                        {car.year} | {car.km} km
                         </span>
                         <strong className="text-black font-bold mt-4">
-                            150.000$</strong> 
+                            {car.price}$</strong> 
                     </div>
 
                     <div className="w-full h-px bg-slate-200 my-2"></div>
 
                     <div className="px-2 pb-2">
-                        <span className="text-black">Campo grande</span>
+                        <span className="text-black">{car.city}</span>
                     </div>
 
                 </section>
+            ))}
             </main>
 
         </Container>
