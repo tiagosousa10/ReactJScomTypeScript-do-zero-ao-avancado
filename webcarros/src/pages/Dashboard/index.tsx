@@ -5,8 +5,8 @@ import { PanelHeader } from "../../components/PanelHeader"
 import { FiTrash2} from'react-icons/fi'
 
 import {collection,getDocs,where, query, doc,deleteDoc} from 'firebase/firestore'
-import {db} from '../../services/firebaseConnection'
-
+import {db,storage} from '../../services/firebaseConnection'
+import {ref,deleteObject} from 'firebase/storage'
 import {AuthContext} from '../../contexts/AuthContext'
 
 interface CarProps{
@@ -62,10 +62,25 @@ export function Dashboard(){
         loadCars()
     }, [user])
 
-   async function handleDeleteCar(id:string){
-        const docRef = doc(db,'cars', id)
+   async function handleDeleteCar(car:CarProps){
+    const itemCar = car;
+        const docRef = doc(db,'cars', itemCar.id)
         await deleteDoc(docRef)
-        setCars(cars.filter(oldCar => oldCar.id !== id)) // retorna todos os carros diferentes do id recebido
+
+        itemCar.images.map(async (image) => {
+            const imagePath = `/images/${image.uid}/${image.name}`
+            const imageRef= ref(storage,imagePath)
+
+            try{
+                await deleteObject(imageRef)
+                setCars(cars.filter(oldCar => oldCar.id !== car.id)) // retorna todos os carros diferentes do id recebido
+
+
+            } catch(err){
+                console.log('erro ao excluir' + err)
+            }
+        })
+
     }
 
     return(
@@ -76,7 +91,7 @@ export function Dashboard(){
             {cars.map((car)=> (
                     <section key={car.id} className="w-full bg-white rounded-lg relative">
                     <button 
-                    onClick={() => {handleDeleteCar(car.id)}}
+                    onClick={() => {handleDeleteCar(car)}}
                     className="absolute px-3 bg-white w-14 h-14 rounded-full items-center justify-center right-2 top-2 drop-shadow">
                         <FiTrash2 size={26} color="#000"/>
                     </button>
