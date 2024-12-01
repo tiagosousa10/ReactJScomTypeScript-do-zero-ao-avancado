@@ -13,6 +13,7 @@ import {v4 as uuidV4} from 'uuid'
 import {storage,db} from '../../../services/firebaseConnection'
 import {addDoc,collection} from 'firebase/firestore'
 import {ref,uploadBytes, getDownloadURL, deleteObject} from 'firebase/storage'
+import toast from "react-hot-toast";
 
 
 const schema = z.object({
@@ -38,17 +39,17 @@ interface ImageItemProps{
 }
 
 export function New(){
+    const [carImages,setCarImages] = useState<ImageItemProps[]>([])
     const {user} = useContext(AuthContext)
     const {register, handleSubmit, formState: {errors}, reset} = useForm<FormData>({
         resolver: zodResolver(schema),
         mode:'onChange'
     })
 
-    const [carImages,setCarImages] = useState<ImageItemProps[]>([])
 
     function onSubmit(data:FormData){
         if(carImages.length === 0){
-            alert('Envie alguma imagem deste carro!')
+            toast.error('Envie pelo menos 1 imagem.')
             return;
         }
 
@@ -78,6 +79,7 @@ export function New(){
             reset();
             setCarImages([])
             console.log('cadastrado com sucesso!')
+            toast.success('Carro cadastrado com sucesso!')
         })
         .catch((e) => {
             console.log('error' + e)
@@ -120,6 +122,7 @@ export function New(){
                 }
 
                 setCarImages((oldImages) => [...oldImages,imageItem])
+                toast.success('Imagem cadastrada com sucesso!')
             })
         })
     }

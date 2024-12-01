@@ -13,6 +13,7 @@ import {zodResolver} from '@hookform/resolvers/zod'
 import { auth } from '../../services/firebaseConnection'
 import {createUserWithEmailAndPassword, updateProfile, signOut} from 'firebase/auth'
 
+import toast from 'react-hot-toast'
 
 const schema = z.object({
     name:z.string().nonempty('O campo nome é obrigatório'),
@@ -21,7 +22,6 @@ const schema = z.object({
 })
 
 type FormData = z.infer<typeof schema>
-
 
 
 
@@ -53,8 +53,9 @@ export function Register(){
             handleInfoUser({
                 name:data.email, 
                 email:data.email,
-                 uid:user.user.uid})
-
+                 uid:user.user.uid
+                })
+            toast.success('Bem vindo ao webcarros!')
             console.log('cadastrado com sucesso!')
             navigate('/')
         })
