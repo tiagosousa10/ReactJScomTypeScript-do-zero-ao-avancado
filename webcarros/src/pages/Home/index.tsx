@@ -1,6 +1,6 @@
 import {useState,useEffect} from 'react'
 import { Container } from "../../components/Container";
-import {collection,query,getDocs,orderBy} from 'firebase/firestore'
+import {collection,query,getDocs,orderBy, where} from 'firebase/firestore'
 import {db} from '../../services/firebaseConnection'
 import { Link } from 'react-router-dom';
 
@@ -25,49 +25,90 @@ interface CarImageProps{
 export function Home(){
     const [ cars,setCars] = useState<CarProps[]>([])
     const [loadImages,setLoadImages] = useState<string[]>([])
+    const [input,setInput] = useState('')
+
 
     useEffect(() => {
-        function loadCars(){
-            const carsRef = collection(db,'cars')
-            const queryRef = query(carsRef, orderBy('created', 'desc'))
-        
-            getDocs(queryRef)
-            .then((snapshot) => {
-                const listCars = [] as CarProps[]
-
-                snapshot.forEach((doc) => {
-                    listCars.push({
-                        id:doc.id,
-                        name:doc.data().name,
-                        year:doc.data().year,
-                        km:doc.data().km,
-                        city:doc.data().city,
-                        price:doc.data().price,
-                        images:doc.data().images,
-                        uid: doc.data().uid
-                    })
-                })
-
-                setCars(listCars)
-            })
-        }
-
         loadCars()
     }, [])
+
+  
+
+    function loadCars(){
+        const carsRef = collection(db,'cars')
+        const queryRef = query(carsRef, orderBy('created', 'desc'))
+    
+        getDocs(queryRef)
+        .then((snapshot) => {
+            const listCars = [] as CarProps[]
+
+            snapshot.forEach((doc) => {
+                listCars.push({
+                    id:doc.id,
+                    name:doc.data().name,
+                    year:doc.data().year,
+                    km:doc.data().km,
+                    city:doc.data().city,
+                    price:doc.data().price,
+                    images:doc.data().images,
+                    uid: doc.data().uid
+                })
+            })
+
+            setCars(listCars)
+        })
+    }
 
     function handleImageLoad(id:string){
         setLoadImages((oldImages => [...oldImages,id]))
     }
 
+    async function handleSearchCar(){
 
+        if(input === ''){
+            loadCars()
+            return;
+        }
+
+        setCars([])
+        setLoadImages([])
+
+        const q = query(collection(db,'cars'), 
+        where('name', '>=', input.toUpperCase()),
+        where('name','<=',input.toUpperCase() + '\uf8ff') //unicode - geralmente para marcar o final de uma consulta/pesquisa('search')
+    )
+
+    const querySnapshot = await getDocs(q)
+
+    const listCars = [] as CarProps[]
+    querySnapshot.forEach((doc) => {
+        listCars.push({
+            id:doc.id,
+            name:doc.data().name,
+            year:doc.data().year,
+            km:doc.data().km,
+            city:doc.data().city,
+            price:doc.data().price,
+            images:doc.data().images,
+            uid: doc.data().uid
+        })
+    })
+
+    setCars(listCars)
+    }
 
     return(
         <Container>
         <section className="bg-white p-4 rounde-lg w-full max-w-3xl mx-auto flex items-center gap-2">
             <input 
                 type="text" 
-                placeholder="Digite o nome do carro..." className="w-full border-2 rounde-lg h-9 px-3 outline-none" />
-            <button className="bg-red-500 h-9 px-8 rounded-lg text-white font-medium text-lg">
+                placeholder="Digite o nome do carro..." className="w-full border-2 rounde-lg h-9 px-3 outline-none"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                />
+            <button 
+            onClick={handleSearchCar}
+            className="bg-red-500 h-9 px-8 rounded-lg text-white font-medium text-lg">
                 Pesquisar
             </button>
         </section>

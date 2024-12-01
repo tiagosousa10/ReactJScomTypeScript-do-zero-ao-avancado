@@ -60,9 +60,8 @@ export function New(){
             }
         })
 
-
         addDoc(collection(db,'cars'), { //adicionar na base dados
-            name:data.name,
+            name:data.name.toUpperCase(),
             model:data.model,
             whatsapp:data.whatsapp,
             city:data.city,
