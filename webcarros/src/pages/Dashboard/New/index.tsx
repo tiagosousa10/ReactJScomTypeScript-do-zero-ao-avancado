@@ -4,7 +4,6 @@ import { PanelHeader } from "../../../components/PanelHeader";
 
 import {FiUpload, FiTrash} from 'react-icons/fi'
 import {useForm} from 'react-hook-form'
-import {Input} from '../../../components/Input'
 import {z} from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
 import {AuthContext} from '../../../contexts/AuthContext'
@@ -14,6 +13,14 @@ import {storage,db} from '../../../services/firebaseConnection'
 import {addDoc,collection} from 'firebase/firestore'
 import {ref,uploadBytes, getDownloadURL, deleteObject} from 'firebase/storage'
 import toast from "react-hot-toast";
+
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../../components/ui/card';
+import { Button } from '../../../components/ui/button';
+import { Input } from '../../../components/ui/input';
+import { Textarea } from '../../../components/ui/textarea';
+import { Label } from '../../../components/ui/label';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../../../components/ui/form';
+import { Spinner } from '../../../components/ui/spinner';
 
 
 const schema = z.object({
@@ -40,8 +47,9 @@ interface ImageItemProps{
 
 export function New(){
     const [carImages,setCarImages] = useState<ImageItemProps[]>([])
+    const [uploading, setUploading] = useState(false)
     const {user} = useContext(AuthContext)
-    const {register, handleSubmit, formState: {errors}, reset} = useForm<FormData>({
+    const form = useForm<FormData>({
         resolver: zodResolver(schema),
         mode:'onChange'
     })
@@ -61,7 +69,7 @@ export function New(){
             }
         })
 
-        addDoc(collection(db,'cars'), { //adicionar na base dados
+        addDoc(collection(db,'cars'), {
             name:data.name.toUpperCase(),
             model:data.model,
             whatsapp:data.whatsapp,
@@ -76,13 +84,13 @@ export function New(){
             images: carListImages,
         })
         .then(() => {
-            reset();
+            form.reset();
             setCarImages([])
-            console.log('cadastrado com sucesso!')
             toast.success('Carro cadastrado com sucesso!')
         })
         .catch((e) => {
             console.log('error' + e)
+            toast.error('Erro ao cadastrar carro.')
         })
 
     }
@@ -95,7 +103,7 @@ export function New(){
                 await handleUpload(image)
 
             } else{
-                alert('Envie uma imagem JPEG ou PNG!')
+                toast.error('Envie uma imagem JPEG ou PNG!')
                 return;
             }
         }
@@ -106,12 +114,13 @@ export function New(){
             return;
         }
 
+        setUploading(true)
         const currentUid = user?.uid;
-        const uidImage = uuidV4() // gerar um uid aleatorio
+        const uidImage = uuidV4()
 
-        const updaloadRef = ref(storage, `images/${currentUid}/${uidImage}`) // referencia onde quero guardar as imagens na BASE DADOS
+        const updaloadRef = ref(storage, `images/${currentUid}/${uidImage}`)
         
-        uploadBytes(updaloadRef, image)// envia para a referencia a image
+        uploadBytes(updaloadRef, image)
         .then((snapshot) => {
             getDownloadURL(snapshot.ref).then((downloadUrl) => {
                 const imageItem = {
@@ -123,7 +132,12 @@ export function New(){
 
                 setCarImages((oldImages) => [...oldImages,imageItem])
                 toast.success('Imagem cadastrada com sucesso!')
+                setUploading(false)
             })
+        })
+        .catch(() => {
+            toast.error('Erro ao fazer upload da imagem.')
+            setUploading(false)
         })
     }
 
@@ -135,8 +149,10 @@ export function New(){
      try{
         await deleteObject(imageRef)
         setCarImages(carImages.filter((car) => car.url !== item.url))
+        toast.success('Imagem removida!')
      }catch(e){
         console.log('erro ao elimniar' + e)
+        toast.error('Erro ao remover imagem.')
      }
     }
 
@@ -144,127 +160,195 @@ export function New(){
 
     return(
         <Container>
-            <PanelHeader/>
+            <div className="py-6 md:py-8 space-y-6 md:space-y-8">
+                <PanelHeader/>
 
-            <div className="w-full bg-white p-3 rounded-lg flex flex-col sm:flex-row items-center gap-2">
-                <button 
-                    className="border-2 w-48 rounded-lg flex items-center justify-center cursor-pointer border-gray-600 h-32 md:w-48">
-                    <div className="absolute cursor-pointer">
-                        <FiUpload size={30} color="#000"  />
-                    </div>
-                    <div className="cursor-pointer">
-                        <input 
-                            type="file"
-                            accept="image/**" 
-                            className="opacity-0 cursor-pointer" 
-                            onChange={handleFile}/>
-                    </div>
-                </button>
+                {/* Image Upload Section */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Imagens do Carro</CardTitle>
+                        <CardDescription>Adicione pelo menos uma imagem do carro</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="flex flex-col sm:flex-row items-start gap-4">
+                            <label className="border-2 border-dashed w-full sm:w-48 rounded-lg flex items-center justify-center cursor-pointer border-primary h-32 hover:bg-accent transition-colors">
+                                {uploading ? (
+                                    <Spinner />
+                                ) : (
+                                    <>
+                                        <div className="flex flex-col items-center gap-2">
+                                            <FiUpload size={30} className="text-primary" />
+                                            <span className="text-sm text-muted-foreground">Upload</span>
+                                        </div>
+                                        <input 
+                                            type="file"
+                                            accept="image/jpeg,image/png" 
+                                            className="hidden" 
+                                            onChange={handleFile}
+                                            disabled={uploading}
+                                        />
+                                    </>
+                                )}
+                            </label>
 
-                {carImages.map((item) => (
-                    <div key={item.name} className="w-full h-32 flex items-center justify-center relative ">
-                        <button className="absolute" onClick={() => handleDeleteImage(item)}>
-                            <FiTrash size={28} color="#fff"/>
-                        </button>
-                        <img src={item.previewUrl} className="rounde-lg h-32 object-cover" alt="fotoCarro"/>
-                    </div>
-                ))}
+                            <div className="flex flex-wrap gap-3 flex-1">
+                                {carImages.map((item) => (
+                                    <div key={item.name} className="relative group w-32 h-32 rounded-lg overflow-hidden border">
+                                        <button 
+                                            className="absolute top-1 right-1 z-10 bg-destructive text-destructive-foreground rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity" 
+                                            onClick={() => handleDeleteImage(item)}
+                                        >
+                                            <FiTrash size={16} />
+                                        </button>
+                                        <img 
+                                            src={item.previewUrl} 
+                                            className="w-full h-full object-cover" 
+                                            alt="Preview"
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                {/* Form Section */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Informações do Carro</CardTitle>
+                        <CardDescription>Preencha todos os campos abaixo</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <Form {...form}>
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                                <FormField
+                                    control={form.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Nome do carro</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Ex. Onix 1.0..." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="model"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Modelo do carro</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Ex. 1.0 flex PLUS Manual..." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="year"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Ano do carro</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Ex. 2016/2016..." {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="km"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>KM do carro</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Ex. 23.555..." {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="whatsapp"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Telefone / Whatsapp</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Ex. 351917381333..." {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="city"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Cidade</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Ex. Porto..." {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+
+                                <FormField
+                                    control={form.control}
+                                    name="price"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Preço</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Ex. 93.000..." {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <FormField
+                                    control={form.control}
+                                    name="description"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Descrição</FormLabel>
+                                            <FormControl>
+                                                <Textarea 
+                                                    placeholder="Digite a descricao completa do carro..."
+                                                    className="min-h-[100px]"
+                                                    {...field} 
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+
+                                <Button type="submit" className="w-full" size="lg">
+                                    Adicionar Carro
+                                </Button>
+                            </form>
+                        </Form>
+                    </CardContent>
+                </Card>
             </div>
-
-
-            <div className="w-full bg-white p-3 rounded-lg flex-col flex sm:flex-row items-center gap-2 mt-2">
-                <form className="w-full" onClick={handleSubmit(onSubmit)}>
-                    <div className="mb-3">
-                        <p className="mb-2 font-medium">Nome do carro</p>
-                        <Input 
-                            type="text"  
-                            register={register} 
-                            name="name" error={errors.name?.message} 
-                            placeholder="Ex. Onix 1.0..."     />
-                    </div>
-
-                    <div className="mb-3">
-                        <p className="mb-2 font-medium">Modelo do carro</p>
-                        <Input 
-                            type="text"  
-                            register={register} 
-                            name="model" 
-                            error={errors.model?.message} 
-                            placeholder="Ex. 1.0 flex PLUS Manual..."     />
-                    </div>
-
-                    <div className="flex w-full mb-3 flex-row items-center gap-4">
-                    <div className="w-full">
-                        <p className="mb-2 font-medium">Ano do carro</p>
-                        <Input 
-                        type="text" 
-                         register={register} 
-                         name="year" 
-                         error={errors.year?.message}
-                          placeholder="Ex. 2016/2016..."     />
-                    </div>
-
-                    <div className="w-full">
-                        <p className="mb-2 font-medium">KM do carro</p>
-                        <Input 
-                        type="text" 
-                         register={register} 
-                         name="km" 
-                         error={errors.km?.message}
-                          placeholder="Ex. 23.555..."     />
-                    </div>
-                    </div>
-
-                    <div className="flex w-full mb-3 flex-row items-center gap-4">
-                    <div className="w-full">
-                        <p className="mb-2 font-medium">Telefone / Whatsapp</p>
-                        <Input 
-                        type="text" 
-                         register={register} 
-                         name="whatsapp" 
-                         error={errors.whatsapp?.message}
-                          placeholder="Ex. 351917381333..."     />
-                    </div>
-
-                    <div className="w-full">
-                        <p className="mb-2 font-medium">Cidade</p>
-                        <Input 
-                        type="text" 
-                         register={register} 
-                         name="city" 
-                         error={errors.city?.message}
-                          placeholder="Ex. Porto..."     />
-                    </div>
-                    </div>
-
-                    <div className="mb-3">
-                        <p className="mb-2 font-medium">Preço</p>
-                        <Input 
-                            type="text"  
-                            register={register} 
-                            name="price" error={errors.price?.message} 
-                            placeholder="Ex. 93.000..."     />
-                    </div>
-
-                    <div className="mb-3">
-                        <p className="mb-2 font-medium">Descricao</p>
-                        <textarea 
-                            className="border-2 w-full rounded-md h-24 px-2" 
-                            {...register("description")} 
-                            name="description" 
-                            id="description" 
-                            placeholder="Digite a descricao completa do carro..."
-                            />
-                            {errors.description && <p className="mb-1 text-red-500"> {errors.description.message} </p>}
-
-                    </div>
-
-                    <button type="submit" className="rounded-md bg-zinc-900 text-white font-medium w-full h-10">
-                        Adicionar
-                    </button>
-                </form>
-            </div>
-
         </Container>
     )
 }
