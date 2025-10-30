@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 93%;
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
@@ -29,6 +29,11 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    /* Nova paleta de cores */
+    --navbar: #6fa4af;
+    --background-color: #f4e9d7;
+    --primary-accent: #d97d55;
+    --secondary-accent: #b8c4a9;
   }
 }
 
@@ -38,6 +43,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #faf5f9;
+    background-color: #ffffff;
   }
 }
