@@ -1,42 +1,313 @@
-.container{
-    padding: 0 14px;
-    color: #fff;
-    font-size: 18px;
+.container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 24px 20px;
+  background: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
-.center{
-    text-align: center;
-    margin-bottom: 14px;
-}
-
-.content{
-    background-color: #0f0f0f;
-    margin: 24px auto;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 420px;
-    border-radius: 14px;
-    gap: 14px;
-}
-
-.logo{
-    height: 60px;
-    width: 60px;
-    transition: all 1s ;
-}
-
-.logo:hover{
-    transform: rotate(360deg);
-}
-
-.profit{
-    color: #12f98a;
-    font-weight: bold;
+@media screen and (min-width: 1400px) {
+  .container {
+    padding: 24px 40px;
   }
-  
-.loss{
-    color: #f91257;
-    font-weight: bold;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+  font-size: 18px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  width: 100%;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.breadcrumb a {
+  color: #30beff;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb a:hover {
+  color: #2aa8e6;
+}
+
+.breadcrumb span {
+  color: #6c757d;
+}
+
+/* Main Layout */
+.mainLayout {
+  width: 100%;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+  align-items: start;
+  grid-template-rows: auto;
+}
+
+/* Left Section */
+.leftSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 0;
+}
+
+.coinHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.coinLogo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.coinTitle h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #212529;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.coinRank {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.priceSection {
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 24px;
+}
+
+.currentPrice {
+  font-size: 36px;
+  font-weight: 700;
+  color: #212529;
+  margin: 0 0 12px 0;
+  line-height: 1;
+}
+
+.priceChange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.changePositive {
+  color: #16c784;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.changeNegative {
+  color: #ea3943;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.infoIcon {
+  color: #6c757d;
+  font-size: 16px;
+  cursor: help;
+}
+
+/* Range Bar */
+.rangeBarContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rangeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.rangeBar {
+  width: 100%;
+}
+
+.rangeBarBg {
+  position: relative;
+  width: 100%;
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.rangeBarFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  background: #16c784;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.rangeIndicator {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: #16c784;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: left 0.3s ease;
+}
+
+.rangeValues {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: #212529;
+}
+
+/* Metrics Grid */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.metricItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.metricHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.metricLabel {
+  font-size: 14px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.metricInfoIcon {
+  color: #adb5bd;
+  font-size: 14px;
+  cursor: help;
+}
+
+.metricValue {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212529;
+}
+
+/* Right Section */
+.rightSection {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.chartPlaceholder {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 500px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px dashed #dee2e6;
+}
+
+.chartHeader {
+  text-align: center;
+}
+
+.chartHeader h3 {
+  font-size: 20px;
+  color: #212529;
+  margin: 0 0 8px 0;
+}
+
+.chartHeader p {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Responsividade */
+@media screen and (max-width: 1024px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
+
+  .leftSection {
+    max-width: 100%;
+  }
+
+  .chartPlaceholder {
+    min-height: 400px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 16px;
+  }
+
+  .currentPrice {
+    font-size: 28px;
+  }
+
+  .coinTitle h1 {
+    font-size: 20px;
+  }
+
+  .metricsGrid {
+    gap: 12px;
+  }
+
+  .metricItem {
+    padding: 12px;
+  }
+
+  .metricValue {
+    font-size: 16px;
+  }
+}
