@@ -11,15 +11,15 @@ export function Header(){
     }
 
     return(
-        <header className='w-full max-w-2xl mt-4 px-1'>
-           <nav className='w-full bg-white h-12 flex items-center justify-between rounded-md px-3'>
-            <div className='flex gap-4 font-medium'>
-                <Link to={"/"}>Home</Link>
-                <Link to={"/admin"}>Links</Link>
-                <Link to={"/admin/social"}>Redes Sociais</Link>
+        <header className='w-full mt-4'>
+           <nav className='w-full bg-white h-14 flex items-center justify-between rounded-lg px-4 shadow-md'>
+            <div className='flex gap-6 font-medium'>
+                <Link to={"/"} className="text-gray-700 hover:text-teal-500 transition-colors">Home</Link>
+                <Link to={"/admin"} className="text-gray-700 hover:text-teal-500 transition-colors">Links</Link>
+                <Link to={"/admin/social"} className="text-gray-700 hover:text-teal-500 transition-colors">Redes Sociais</Link>
             </div>
 
-            <button onClick={handleLogout}>
+            <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">
                 <BiLogOut  size={28} color='#db2629' />
             </button>
            </nav>
