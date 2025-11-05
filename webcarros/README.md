@@ -2,14 +2,42 @@
 
 A modern web platform for buying and selling vehicles, developed with React, TypeScript, and Firebase. The project offers a complete car listing management experience, with user authentication, image uploads, advanced search, and a responsive interface.
 
+## 📸 Screenshots
+
+### Home Page
+![Hero Section](docs/images/hero.png)
+*Hero section with integrated search and filters*
+
+![Cars Grid](docs/images/cars.png)
+*Browse available vehicles with advanced filtering options*
+
+### Authentication
+![Login Page](docs/images/login.png)
+*User login interface*
+
+![Sign Up Page](docs/images/signup.png)
+*User registration interface*
+
+### Dashboard & Management
+![Dashboard](docs/images/dashboard.png)
+*User dashboard with car listings management*
+
+![Add New Car](docs/images/new-car.png)
+*Add new vehicle listing with multiple image uploads*
+
+### Vehicle Details
+![Car Details](docs/images/car-details.png)
+*Complete vehicle information page with image carousel and WhatsApp contact*
+
 ## 📋 Table of Contents
 
-- [Features](#features)
-- [Technologies and Libraries](#technologies-and-libraries)
-- [Project Structure](#project-structure)
-- [Application Flow](#application-flow)
-- [Installation and Running](#installation-and-running)
-- [Color Palette](#color-palette)
+- [Screenshots](#-screenshots)
+- [Features](#-features)
+- [Installation and Running](#-installation-and-running)
+- [Technologies and Libraries](#-technologies-and-libraries)
+- [Project Structure](#-project-structure)
+- [Application Flow](#-application-flow)
+- [Color Palette](#-color-palette)
 
 ## ✨ Features
 
