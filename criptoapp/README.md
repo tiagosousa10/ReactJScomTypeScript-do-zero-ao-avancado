@@ -2,20 +2,42 @@
 
 A modern, responsive cryptocurrency tracking application built with React and TypeScript. Track real-time cryptocurrency prices, market data, and detailed coin information with a beautiful, professional interface.
 
+## 📸 Screenshots
+
+### Hero Section
+
+The landing page features a stunning hero section with gradient background and smooth scroll navigation.
+
+![Hero Section](./docs/images/hero.png)
+
+### Cryptocurrency List
+
+Professional table displaying top cryptocurrencies with comprehensive market data including prices, changes, and volume.
+
+![Cryptocurrency Table](./docs/images/table.png)
+
+### Coin Detail Page
+
+Detailed view of each cryptocurrency with market metrics, price range visualization, and comprehensive supply information.
+
+![Coin Detail Page](./docs/images/crypto-description.png)
+
 ## 📋 Table of Contents
 
-- [About](#about)
-- [Features](#features)
-- [Project Flow](#project-flow)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [API](#api)
+- [Screenshots](#-screenshots)
+- [About](#-about)
+- [Features](#-features)
+- [Project Flow](#-project-flow)
+- [Technologies Used](#-technologies-used)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Project Structure](#-project-structure)
+- [API](#-api)
 
 ## 🎯 About
 
 Crypto App is a comprehensive cryptocurrency dashboard that allows users to:
+
 - Browse the top cryptocurrencies by market cap
 - Search for specific cryptocurrencies
 - View detailed information about each cryptocurrency
@@ -75,11 +97,13 @@ User can:
 ### Route Flow
 
 1. **Home Route (`/`)**
+
    - Displays hero section
    - Shows list of top cryptocurrencies
    - Handles search functionality
 
 2. **Detail Route (`/detail/:cripto`)**
+
    - Displays detailed information about selected cryptocurrency
    - Shows market data and metrics
    - Handles invalid coin IDs (redirects to home)
@@ -111,14 +135,17 @@ User interaction triggers new requests
 ### Core Dependencies
 
 - **React** (`^18.3.1`)
+
   - Modern UI library for building user interfaces
   - Component-based architecture
   - Hooks for state management and side effects
 
 - **React DOM** (`^18.3.1`)
+
   - React renderer for web applications
 
 - **React Router DOM** (`^6.28.0`)
+
   - Client-side routing library
   - Enables navigation between pages without full page reloads
   - Used for: Home, Detail, and NotFound routes
@@ -130,21 +157,25 @@ User interaction triggers new requests
 ### Development Dependencies
 
 - **TypeScript** (`~5.6.2`)
+
   - Strongly typed programming language
   - Provides type safety and better developer experience
   - Type definitions for React components and props
 
 - **Vite** (`^5.4.10`)
+
   - Next-generation frontend build tool
   - Fast development server with HMR (Hot Module Replacement)
   - Optimized production builds
   - Configured with proxy for API requests
 
 - **@vitejs/plugin-react** (`^4.3.3`)
+
   - Vite plugin for React support
   - Enables JSX transformation and React Fast Refresh
 
 - **ESLint** (`^9.13.0`)
+
   - Code linting tool for JavaScript/TypeScript
   - Ensures code quality and consistency
 
@@ -161,22 +192,26 @@ User interaction triggers new requests
 ## 🚀 Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd criptoapp
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Start development server**
+
    ```bash
    npm run dev
    ```
 
 4. **Build for production**
+
    ```bash
    npm run build
    ```
@@ -195,11 +230,13 @@ Run `npm run dev` to start the Vite development server. The application will be 
 ### Features Usage
 
 1. **Searching for a Cryptocurrency**
+
    - Type the name or symbol in the search bar
    - Press Enter or click the search icon
    - The app will find the coin and navigate to its detail page
 
 2. **Viewing Coin Details**
+
    - Click on any cryptocurrency in the list
    - View comprehensive market information
    - Use breadcrumb navigation to return home
@@ -278,6 +315,7 @@ The application uses the **CoinGecko API** (free tier, no authentication require
 ## 🎨 Styling
 
 The application uses **CSS Modules** for component-scoped styling:
+
 - `.module.css` files for each component/page
 - Global styles in `src/index.css`
 - Responsive design with media queries
@@ -295,12 +333,14 @@ The application uses **CSS Modules** for component-scoped styling:
 ### Vite Configuration
 
 The `vite.config.ts` includes:
+
 - React plugin configuration
 - Proxy setup for API requests (optional, for CORS handling)
 
 ### TypeScript Configuration
 
 Separate configs for:
+
 - Application code (`tsconfig.app.json`)
 - Node scripts (`tsconfig.node.json`)
 - Main configuration (`tsconfig.json`)
