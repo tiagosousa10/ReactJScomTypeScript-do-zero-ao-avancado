@@ -2,6 +2,47 @@
 
 A modern and elegant application to create and manage a personalized link page (similar to Linktree), developed with React, TypeScript, and Firebase. Allows users to create a unique page with their important links and social networks.
 
+---
+
+## 📸 Screenshots
+
+### 🏠 Public Home Page
+The main public page where visitors can access all your links and social networks.
+
+![Home Page](./docs/images/links.png)
+
+### 🔐 Login Page
+Secure authentication page with modern design and intuitive interface.
+
+![Login Page](./docs/images/login.png)
+
+### ⚙️ Admin Panel - Links Management
+Manage your links with full customization options including colors, preview, and organization.
+
+![Admin Panel](./docs/images/admin.png)
+
+### 📱 Social Media Configuration
+Configure your social network links (Facebook, Instagram, YouTube) that appear on your public page.
+
+![Social Media](./docs/images/social%20media.png)
+
+---
+
+## 🎯 About the Project
+
+DevLink is a professional web application designed to help you create and manage a beautiful, personalized link page. Perfect for developers, content creators, influencers, and businesses who want to share all their important links in one place.
+
+### 🎨 What Makes DevLink Special?
+
+- **Beautiful Design**: Modern interface with elegant gradients and textures
+- **Easy to Use**: Intuitive admin panel - no coding required
+- **Fully Customizable**: Choose colors for each link to match your brand
+- **Real-time Preview**: See how your links look before publishing
+- **Mobile Responsive**: Looks great on all devices
+- **Fast & Secure**: Built with modern technologies and Firebase security
+
+---
+
 ## 📋 Table of Contents
 
 - [About the Project](#-about-the-project)
@@ -17,13 +58,16 @@ A modern and elegant application to create and manage a personalized link page (
 
 ## 🎯 About the Project
 
-DevLink is a web application that allows you to create a personalized page with your important links, such as projects, social networks, blogs, and more. The application offers:
+DevLink is a professional web application designed to help you create and manage a beautiful, personalized link page. Perfect for developers, content creators, influencers, and businesses who want to share all their important links in one place.
 
-- **Modern and responsive interface** with clean and elegant design
-- **Secure authentication system** with Firebase
-- **Link management** with customizable colors
-- **Social media integration** (Facebook, Instagram, YouTube)
-- **Admin panel** to manage content
+### Key Benefits
+
+- **Professional Appearance**: Create a stunning public page that showcases all your links
+- **Easy Management**: Simple admin panel to add, edit, and organize your links
+- **Full Customization**: Customize colors, styles, and layout for each link
+- **Social Integration**: Seamlessly integrate your social media profiles
+- **Secure Access**: Protected admin area with Firebase authentication
+- **Real-time Updates**: Changes appear instantly on your public page
 
 ## ✨ Features
 
@@ -122,40 +166,91 @@ devlink/
 - **Document `social/link`**: Stores social networks
 - Real-time synchronization with `onSnapshot`
 
-## 🚀 Installation
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js (version 18 or higher)
-- npm or yarn
-- Firebase account (for backend configuration)
+Before you begin, ensure you have the following installed:
+- **Node.js** (version 18 or higher) - [Download here](https://nodejs.org/)
+- **npm** or **yarn** package manager
+- **Firebase account** - [Create free account](https://firebase.google.com/)
 
-### Step by Step
+### Installation Steps
 
-1. **Clone the repository**
+#### 1. Clone the Repository
 ```bash
 git clone <repository-url>
 cd devlink
 ```
 
-2. **Install dependencies**
+#### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-3. **Configure Firebase**
-   - Create a project in [Firebase Console](https://console.firebase.google.com/)
-   - Enable Authentication (Email/Password) and Firestore
-   - Copy the configuration credentials
-   - Update the `src/services/firebaseConnection.ts` file with your credentials
+#### 3. Set Up Firebase
 
-4. **Run the project**
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Create a new project (or use an existing one)
+3. Enable **Authentication**:
+   - Go to Authentication → Sign-in method
+   - Enable **Email/Password** provider
+4. Enable **Firestore Database**:
+   - Go to Firestore Database
+   - Create database in production mode
+   - Set security rules (you can use test mode for development)
+5. Get your configuration:
+   - Go to Project Settings → General
+   - Scroll to "Your apps" → Web app
+   - Copy the Firebase configuration object
+
+#### 4. Configure Firebase Connection
+
+Edit `src/services/firebaseConnection.ts` and replace with your Firebase credentials:
+
+```typescript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+```
+
+#### 5. Set Up Firestore Collections
+
+In your Firebase Console, create the following structure:
+
+**Collection: `links`**
+- This collection will store your custom links
+- Fields: `name` (string), `url` (string), `bg` (string), `color` (string), `created` (timestamp)
+
+**Collection: `social`**
+- Document ID: `link`
+- Fields: `facebook` (string), `instagram` (string), `youtube` (string)
+
+> 💡 **Note**: The collections will be created automatically when you first add data through the application.
+
+#### 6. Run the Application
+
 ```bash
 npm run dev
 ```
 
-5. **Access the application**
-   - Open `http://localhost:5173` in your browser
+#### 7. Access the Application
+
+- Open your browser and navigate to `http://localhost:5173`
+- Create your first admin account on the login page
+- Start adding your links!
+
+### First Steps After Installation
+
+1. **Create Admin Account**: Visit `/login` and sign up with your email
+2. **Add Your Links**: Go to `/admin` and start creating your personalized links
+3. **Configure Social Media**: Visit `/admin/social` to add your social network profiles
+4. **Share Your Page**: Your public page is available at `/` - share it with the world!
 
 ## ⚙️ Configuration
 
@@ -202,31 +297,70 @@ npm run lint
 
 ## 📄 Application Pages
 
-### 🏠 Home (`/`)
-- Main public page
-- Displays all registered links
-- Shows configured social network icons
-- Background with elegant gradient and grainy texture
+### 🏠 Home Page (`/`)
+Your public-facing page where visitors can access all your links.
 
-### 🔐 Login (`/login`)
-- Authentication page
-- Modern design with icons in fields
-- Show/hide password functionality
-- Redirects to `/admin` after successful login
+**Features:**
+- Displays all your registered links in an organized, beautiful layout
+- Shows social media icons (Facebook, Instagram, YouTube) at the bottom
+- Elegant gradient background with subtle texture
+- Responsive design that works on all devices
+- Each link is clickable and opens in a new tab
 
-### ⚙️ Admin (`/admin`)
-- Admin panel to manage links
-- Form to create new links
-- Color selectors for customization
-- List of all links with delete option
+**How to Use:**
+- Simply share your homepage URL with others
+- Visitors can click any link to navigate to your content
+- Social media icons link to your profiles
 
-### 📱 Networks (`/admin/social`)
-- Social network configuration
-- Fields for Facebook, Instagram, and YouTube
-- Automatic saving to Firestore
+### 🔐 Login Page (`/login`)
+Secure entry point to your admin panel.
 
-### ❌ Error (`/*`)
-- 404 page for routes not found
+**Features:**
+- Modern, clean design with icon-enhanced fields
+- Show/hide password toggle for security
+- Form validation to ensure proper login
+- Automatic redirect to admin panel after successful login
+- "Forgot password" link (can be configured with Firebase)
+
+**How to Use:**
+1. Enter your registered email and password
+2. Click "Sign in" or press Enter
+3. You'll be automatically redirected to the admin panel
+
+### ⚙️ Admin Panel - Links (`/admin`)
+Your central hub for managing all your links.
+
+**Features:**
+- **Create Links**: Add new links with custom name, URL, and colors
+- **Live Preview**: See exactly how your link will appear before saving
+- **Color Customization**: Choose background and text colors for each link
+- **Link Management**: View all your links in one place
+- **Delete Links**: Remove links you no longer need
+
+**How to Use:**
+1. Fill in the link name and URL
+2. Choose colors using the color pickers
+3. See the preview of how it will look
+4. Click "Cadastrar" (Register) to save
+5. Your links appear in the list below
+6. Click the trash icon to delete any link
+
+### 📱 Social Media Configuration (`/admin/social`)
+Manage your social network profiles that appear on your public page.
+
+**Features:**
+- Configure Facebook, Instagram, and YouTube links
+- Icons automatically appear on your public page
+- Changes save automatically to Firebase
+- Easy-to-use form with icons
+
+**How to Use:**
+1. Enter your social media profile URLs
+2. Click "Guardar Links" (Save Links)
+3. Your social icons will appear on the home page
+
+### ❌ Error Page (`/*`)
+404 page for any routes that don't exist - helps users navigate back to your content.
 
 ## 🧩 Main Components
 
